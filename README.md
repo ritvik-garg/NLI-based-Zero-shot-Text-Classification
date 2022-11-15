@@ -1,9 +1,9 @@
 #  **Binary Text Classification**
 
-**Objective** :
+**Objective** :<br>
 Given a post/conversation, identify if the post owner is participating in an event or not.
 
-**Dataset** :
+**Dataset** :<br>
 No training dataset available.
 Some data to get an idea for pre-processing and cleaning can be found here : https://drive.google.com/drive/folders/1JQj-i3TU_5lSlArsermd2O8Rgj8h1Sm9
 
@@ -28,12 +28,12 @@ Some data to get an idea for pre-processing and cleaning can be found here : htt
 4. Example command :--> `run.sh ./data.csv sentence true_label`
 
 
-**Results**
+**Results**<br>
 These are the screenshot for some samples I tested :
 ![Example 1](https://github.com/ritvik-garg/NLI-based-Zero-shot-Text-Classification/blob/main/results/ss1.png)
 ![Example 2](https://github.com/ritvik-garg/NLI-based-Zero-shot-Text-Classification/blob/main/results/ss2.png)
 
 
 
-**Scope of Improvement**
+**Scope of Improvement**<br>
 Weak supervision technique could yield better result as we will have some data to fine-tine our model on our domain data. But creating synthetic data was a challenge. I tried first getting samples where the conversation was about some event and then classifying those samples into attending/ not attending sample. But I couldn't find quantity and quality on sythetic data, so went with Zero-shot apporach, and it was giving decent result on my limited test-cases.
