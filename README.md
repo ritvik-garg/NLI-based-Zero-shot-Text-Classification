@@ -30,6 +30,7 @@ Some data to get an idea for pre-processing and cleaning can be found here : htt
 
 **Results**
 These are the screenshot for some samples I tested :
+![https://github.com/ritvik-garg/NLI-based-Zero-shot-Text-Classification/blob/main/results/ss1.png]
 
 
 
