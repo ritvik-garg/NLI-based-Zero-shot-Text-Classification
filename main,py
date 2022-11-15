@@ -1,0 +1,100 @@
+import pandas as pd
+import re
+import sys
+import nltk
+import html
+from sklearn.metrics import accuracy_score
+
+from transformers import pipeline
+model_labels = ["attending the event", "not attending the event"]
+classifier = pipeline("zero-shot-classification",
+                      model="facebook/bart-large-mnli")
+
+emoji_pattern = re.compile("["
+                           u"\U0001F600-\U0001F64F"  # emoticons
+                           u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+                           u"\U0001F680-\U0001F6FF"  # transport & map symbols
+                           u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                           "]+", flags=re.UNICODE)
+
+
+def cleaner(text):
+    """
+
+    :param text: text to be cleaned
+    :type text:  str
+    :return: cleaned and processed text
+    :rtype: str
+    """
+
+    if type(text) == float:
+        return ""
+    text = html.unescape(text)
+    text = text.lower()
+    text = re.sub("@[A-Za-z0-9]+", "", text)  # Remove mentions
+    text = re.sub("#[A-Za-z0-9_]+", "", text)  # Remove hashtags
+    text = re.sub(r"(?:\@|http?\://|https?\://|www)\S+", "", text)  # Remove http links
+    text = emoji_pattern.sub(r'', text)  # Remove emojis
+    text = text.replace("#", "").replace("_", " ")  # Remove hashtag sign but keep the text
+    text = " ".join(w for w in nltk.wordpunct_tokenize(text) if w.isalpha())  # Remove non-alpha words
+    return text
+
+
+def test_model(test_data):
+    """
+
+    :param test_data: list of strings on which model is to be run.
+    :type test_data: list(str)
+    :return: list containing flag for attending the event or not, for corresponding text
+    :rtype: list(Boolean)
+    """
+
+    isAttending = []
+    for text in test_data:
+        if text.strip() == "":
+            isAttending.append(False)
+        else:
+            isAttending.append(classifier(text, model_labels)["labels"][0] == "attending the event")
+    return isAttending
+
+
+def get_accuracy_score(pred, true):
+    """
+
+    :param pred: predicted label
+    :type pred: list
+    :param true: true label
+    :type true: list
+    :return: accuracy score
+    :rtype: float
+    """
+    
+    return accuracy_score(true, pred)
+
+
+def read_data_and_run_model(filepath, conversation_col_name, true_label_col_name):
+    """
+
+    :param filepath: path of test file, including filename
+    :type filepath: str
+    :param conversation_col_name: name of the column having post/conversations
+    :type conversation_col_name: str
+    :param true_label_col_name: name of the column having true label for corresponding posts.
+    :type true_label_col_name: str
+    :return: None
+    :rtype: None
+    """
+    
+    df_test = pd.read_csv(filepath)
+    df_test["processed_text"] = df_test[conversation_col_name].map(lambda x: cleaner(x))
+    pred_labels = test_model(df_test["processed_text"].to_list())
+    print("accuracy score : ", get_accuracy_score(pred_labels, df_test[true_label_col_name].to_list()))
+
+
+if __name__ == "__main__":
+    args_list = sys.argv
+    filepath = args_list[1]
+    conversation_col_name = args_list[2]
+    true_label_col_name = args_list[3]
+
+    read_data_and_run_model(filepath, conversation_col_name, true_label_col_name)
