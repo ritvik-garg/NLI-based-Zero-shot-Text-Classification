@@ -1,6 +1,6 @@
 #  **Binary Text Classification**
 
-**Objective** :<br>
+## **Objective** :<br>
 Given a post/conversation, identify if the post owner is participating in an event or not.
 
 **Dataset** :<br>
