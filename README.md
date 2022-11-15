@@ -23,9 +23,10 @@ Some data to get an idea for pre-processing and cleaning can be found here : htt
 
 **How to Run the Code/File**
 1. For installing all the required files, `requirement.txt` file is provided having necessary files which needs to be installed before.
-2. Run shell script using command `run.sh <arg1> <arg2> <arg3>`
-3. In the above command, `<arg1> is the filepath of the testing csv file`, `<arg2> is the name of the text column which will be tested`, and `<arg3> is the name of the column containing "True" label for the corresponding sentences`.
-4. Example command :--> `run.sh ./data.csv sentence true_label`
+2. Make the shell file executable using command : `chmod +x run.sh`
+3. Run shell script using command `./run.sh <arg1> <arg2> <arg3>`
+4. In the above command, `<arg1> is the filepath of the testing csv file including the filename`, `<arg2> is the name of the column having conversation/posts`, and `<arg3> is the name of the column containing "True/Actual" label for the corresponding sentences`.
+5. Example command :--> `./run.sh ./data/testing.csv sentences true_label`
 
 
 **Results**<br>
